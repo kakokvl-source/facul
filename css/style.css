@@ -1,0 +1,367 @@
+/*
+    ========================================
+    JOGO MARIO JUMP - ESTILOS CSS
+    ========================================
+    
+    Arquivo de estilos para o jogo Mario Jump
+    
+    Conceitos CSS3 abordados:
+    - Reset CSS (normalização de estilos)
+    - Box Model (box-sizing)
+    - Posicionamento absoluto e relativo
+    - Animações com @keyframes
+    - Gradientes lineares
+    - Transformações e transições
+    
+    Prof. Alexsander Barreto - AlexHolanda.com.br
+    ========================================
+*/
+
+/* Responsividade básica: área de jogo em telas menores */
+@media (max-width: 480px) {
+  .game-board { height: 360px; }
+  .mario { width: 100px; }
+  .pipe { width: 60px; }
+}
+
+/* 
+    ==========================================
+    RESET CSS - NORMALIZAÇÃO DE ESTILOS
+    ==========================================
+    Seletor universal (*) aplica estilos a TODOS os elementos
+*/
+* {
+  margin: 0; /* Remove margens padrão dos navegadores */
+  padding: 0; /* Remove espaçamentos internos padrão */
+  box-sizing: border-box;
+  /* 
+        BOX-SIZING: border-box
+        Mudança no cálculo de dimensões dos elementos
+        width e height incluem padding e border (não apenas o conteúdo)
+        Facilita o controle preciso de tamanhos
+        
+        Exemplo:
+        - width: 100px + padding: 10px + border: 5px
+        - box-sizing: content-box = 130px total (padrão)
+        - box-sizing: border-box = 100px total (recomendado)
+    */
+}
+
+/* 
+    ==========================================
+    GAME-BOARD: ÁREA PRINCIPAL DO JOGO
+    ==========================================
+    Container que funciona como "palco" do jogo
+*/
+.game-board {
+  width: 100%; /* Largura total da janela do navegador */
+  height: 500px; /* Altura fixa da área de jogo */
+  border-bottom: 25px solid rgb(35, 160, 35);
+  /* 
+        Borda inferior verde simulando o "chão" do jogo
+        rgb(35, 160, 35): verde grama
+        25px: espessura robusta para dar destaque
+    */
+
+  margin: 0 auto;
+  /* 
+        Centralização horizontal do elemento
+        0: margens superior/inferior
+        auto: margens laterais calculadas automaticamente (centraliza)
+    */
+
+  position: relative;
+  /* 
+        POSITION: relative
+        Cria contexto de posicionamento para elementos filhos
+        Elementos com position: absolute dentro dele usarão este como referência
+        Essencial para controlar Mario, cano e nuvens
+    */
+
+  overflow: hidden;
+  /* 
+        OVERFLOW: hidden
+        Esconde elementos que ultrapassam os limites do game-board
+        Importante para:
+        - Ocultar cano antes de entrar na tela (animação)
+        - Ocultar nuvens fora da área visível
+        - Criar efeito de "janela" do jogo
+    */
+
+  background: linear-gradient(#87ceeb, #e0f6ff);
+  /* 
+        GRADIENTE LINEAR: Simula céu
+        #87CEEB (sky blue): cor superior - céu mais escuro
+        #e0f6ff (light blue): cor inferior - céu mais claro
+        Direção padrão: de cima para baixo (top to bottom)
+        Cria sensação de profundidade e realismo
+    */
+}
+
+/* 
+    ==========================================
+    PIPE: OBSTÁCULO DO JOGO
+    ==========================================
+    Cano que se move da direita para esquerda
+*/
+.pipe {
+  position: absolute;
+  /* 
+        POSITION: absolute
+        Remove elemento do fluxo normal do documento
+        Posicionado em relação ao game-board (parent com position: relative)
+        Permite controle preciso de localização (top, right, bottom, left)
+    */
+
+  bottom: 0;
+  /* 
+        Posiciona o cano colado no chão
+        bottom: 0 = distância zero do fundo do game-board
+    */
+
+  width: 80px; /* Largura fixa do cano */
+
+  /* Permite ajustar a velocidade via variável CSS ou inline */
+  animation: pipe-animation var(--pipe-duration, 1.5s) infinite linear;
+  /* 
+        ANIMAÇÃO CSS:
+        - pipe-animation: nome da animação definida em @keyframes
+        - 1.5s: duração (1.5 segundos para atravessar a tela)
+        - infinite: repete indefinidamente
+        - linear: velocidade constante (sem aceleração/desaceleração)
+        
+        Timing functions disponíveis:
+        - linear: velocidade constante
+        - ease: suave (padrão)
+        - ease-in: acelera
+        - ease-out: desacelera
+        - ease-in-out: acelera e desacelera
+    */
+}
+
+/* UI: score e botão */
+.ui {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.score {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+#restart {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  background: #ff595e;
+  color: white;
+  cursor: pointer;
+}
+
+.hidden { display: none; }
+
+/* Esconde o pipe-template que serve apenas para clonagem */
+.pipe.template { display: none; }
+
+/* 
+    ==========================================
+    MARIO: PERSONAGEM PRINCIPAL
+    ==========================================
+    Sprite do Mario que pula ao pressionar tecla
+*/
+.mario {
+  width: 150px; /* Largura do sprite do Mario */
+  position: absolute; /* Posicionamento absoluto dentro do game-board */
+  bottom: 0; /* Inicia no chão (mesma base do cano) */
+  /* 
+        Não possui animação por padrão
+        Animação de pulo é adicionada dinamicamente via JavaScript
+        quando a classe 'jump' é aplicada
+    */
+}
+
+/* 
+    ==========================================
+    JUMP: CLASSE DE ANIMAÇÃO DO PULO
+    ==========================================
+    Aplicada dinamicamente pelo JavaScript
+*/
+.jump {
+  animation: jump 500ms ease-out;
+  /* 
+        ANIMAÇÃO DE PULO:
+        - jump: nome da animação @keyframes
+        - 500ms: meio segundo de duração
+        - ease-out: desacelera no final (física natural do pulo)
+        
+        IMPORTANTE: Classe adicionada/removida via JavaScript
+        mario.classList.add('jump')    → inicia pulo
+        mario.classList.remove('jump') → permite novo pulo
+    */
+}
+
+/* 
+    ==========================================
+    CLOUDS: ELEMENTO DECORATIVO DE FUNDO
+    ==========================================
+    Nuvens que se movem lentamente para criar profundidade
+*/
+.clouds {
+  position: absolute; /* Posicionamento livre dentro do game-board */
+  width: 550px; /* Largura das nuvens */
+
+  animation: clouds-animation 20s infinite linear;
+  /* 
+        ANIMAÇÃO LENTA DAS NUVENS:
+        - 20s: muito mais lento que o cano (efeito parallax)
+        - Cria sensação de profundidade
+        - Nuvens ao fundo movem-se mais devagar que objetos próximos
+        - Técnica de parallax scrolling
+    */
+}
+
+/* 
+    ==========================================
+    @KEYFRAMES: DEFINIÇÕES DE ANIMAÇÕES
+    ==========================================
+    Define os quadros-chave (keyframes) das animações
+*/
+
+/* 
+    ANIMAÇÃO DO CANO
+    Move o cano da direita para esquerda continuamente
+*/
+@keyframes pipe-animation {
+  from {
+    right: -80px;
+    /* 
+            Estado inicial: cano totalmente fora da tela à direita
+            -80px: posição negativa (largura do próprio cano)
+            Garante que cano apareça gradualmente
+        */
+  }
+
+  to {
+    right: 100%;
+    /* 
+            Estado final: cano sai completamente pela esquerda
+            100%: largura total do game-board
+            Depois disso, animação reinicia (infinite)
+        */
+  }
+}
+
+/* 
+    ANIMAÇÃO DO PULO DO MARIO
+    Simula física de um pulo com subida, suspensão e descida
+*/
+@keyframes jump {
+  0% {
+    bottom: 0;
+    /* Início: Mario no chão */
+  }
+
+  40% {
+    bottom: 180px;
+    /* 
+            40% do tempo: atinge altura máxima
+            180px: altura suficiente para passar sobre o cano
+            Subida rápida (0% → 40%)
+        */
+  }
+
+  50% {
+    bottom: 180px;
+    /* 
+            50%: mantém altura (suspensão no ar)
+            Cria efeito mais realista de pulo
+        */
+  }
+
+  60% {
+    bottom: 180px;
+    /* 
+            60%: ainda suspenso
+            Prolonga tempo no ar para facilitar jogabilidade
+        */
+  }
+
+  100% {
+    bottom: 0;
+    /* 
+            Final: retorna ao chão
+            Descida mais lenta (60% → 100%)
+            ease-out torna descida ainda mais suave
+        */
+  }
+}
+
+/* 
+    ANIMAÇÃO DAS NUVENS
+    Movimento horizontal lento para criar profundidade visual
+*/
+@keyframes clouds-animation {
+  from {
+    right: -550px;
+    /* 
+            Início: nuvens fora da tela à direita
+            -550px: largura das próprias nuvens
+        */
+  }
+
+  to {
+    right: 100%;
+    /* 
+            Final: nuvens saem pela esquerda
+            Movimento muito mais lento que o cano (20s vs 1.5s)
+            Efeito parallax: objetos distantes movem-se mais devagar
+        */
+  }
+}
+
+/*
+    ========================================
+    CONCEITOS IMPORTANTES APLICADOS:
+    ========================================
+    
+    1. POSITION (Posicionamento):
+       - relative: cria contexto para filhos absolute
+       - absolute: posicionamento livre em relação ao parent relative
+    
+    2. ANIMAÇÕES CSS:
+       - @keyframes: define os estados da animação
+       - animation: aplica animação ao elemento
+       - Propriedades: nome, duração, repetição, timing
+    
+    3. BOX MODEL:
+       - box-sizing: border-box (facilita cálculos)
+       - width, height, padding, border, margin
+    
+    4. OVERFLOW:
+       - hidden: esconde conteúdo que excede container
+       - Essencial para efeito de "janela" do jogo
+    
+    5. GRADIENTES:
+       - linear-gradient: transição suave entre cores
+       - Direções: top to bottom, left to right, diagonais, ângulos
+    
+    ========================================
+    FÍSICA DO JOGO:
+    ========================================
+    
+    - Cano: velocidade constante (linear)
+    - Mario: pulo com ease-out (desaceleração natural)
+    - Nuvens: movimento lento (parallax)
+    - Colisão: detectada via JavaScript (não CSS)
+    
+    Prof. Alexsander Barreto - AlexHolanda.com.br
+    ========================================
+*/

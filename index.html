@@ -1,0 +1,128 @@
+<!--
+    ========================================
+    JOGO MARIO JUMP - ESTRUTURA HTML
+    ========================================
+    
+    Projeto educacional: Jogo do Mario estilo "endless runner"
+    Objetivo: Demonstrar conceitos de HTML5, CSS3 e JavaScript para desenvolvimento de jogos simples
+    
+    Conceitos abordados:
+    - Estruturação semântica HTML5
+    - Integração de recursos externos (CSS e JavaScript)
+    - Uso de imagens e elementos posicionados
+    - Responsividade básica com viewport
+    
+    Prof. Alexsander Barreto - AlexHolanda.com.br
+    ========================================
+-->
+
+<!DOCTYPE html>
+<!-- 
+    DOCTYPE: Declaração do tipo de documento HTML5
+    Garante que o navegador renderize a página em modo padrão (standards mode)
+-->
+
+<html lang="pt-br">
+  <!-- 
+    Elemento raiz HTML com atributo lang="pt-br"
+    Define o idioma do documento para português brasileiro
+    Importante para: acessibilidade (leitores de tela), SEO e correção ortográfica
+-->
+
+  <head>
+    <!-- 
+        SEÇÃO HEAD: Metadados e recursos do documento
+        Contém informações que não são exibidas diretamente na página
+    -->
+
+    <meta charset="UTF-8" />
+    <!-- 
+        Charset UTF-8: Codificação de caracteres universal
+        Permite uso de caracteres especiais, acentuação e símbolos diversos
+    -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 
+        Viewport: Configuração essencial para responsividade
+        width=device-width: largura se adapta ao dispositivo
+        initial-scale=1.0: zoom inicial de 100%
+    -->
+
+    <link rel="stylesheet" href="./css/style.css" />
+    <!-- 
+        Link para folha de estilos CSS externa
+        Separação de responsabilidades: HTML (estrutura) | CSS (apresentação)
+        Caminho relativo: ./css/ indica subpasta no mesmo diretório
+    -->
+
+    <script src="./js/script.js" defer></script>
+    <!-- 
+        Script JavaScript externo com atributo DEFER
+        defer: aguarda o HTML ser totalmente carregado antes de executar
+        Garante que os elementos DOM estejam disponíveis para manipulação
+        Alternativa: async (executa assim que disponível, sem aguardar HTML)
+    -->
+
+    <title>Mario Jump</title>
+    <!-- 
+        Título da página exibido na aba do navegador
+        Importante para SEO e experiência do usuário
+    -->
+  </head>
+
+  <body>
+    <!-- 
+        SEÇÃO BODY: Conteúdo visível da página
+        Todos os elementos que aparecem na tela ficam aqui
+    -->
+
+    <div class="game-board">
+      <!-- 
+            DIV GAME-BOARD: Container principal do jogo
+            Atua como "palco" onde todos os elementos do jogo são posicionados
+            Uso de classe CSS permite estilização e referência no JavaScript
+        -->
+
+      <img src="./mario-jump-images/clouds.png" class="clouds" />
+      <!-- 
+            IMAGEM DAS NUVENS: Elemento decorativo de fundo
+            - Cria sensação de movimento e profundidade
+            - Animada via CSS (movimentação horizontal contínua)
+            - Posicionada absolutamente dentro do game-board
+        -->
+
+            <img src="./mario-jump-images/mario.gif" class="mario" />
+            <!-- IMAGEM DO MARIO: personagem jogável -->
+
+            <div id="pipes-container">
+                <img src="./mario-jump-images/pipe.png" class="pipe template" aria-hidden="true" />
+            </div>
+
+            <div class="ui">
+                <div class="score">Score: <span id="score">0</span></div>
+                <button id="restart" class="hidden">Jogar novamente</button>
+            </div>
+      <!-- 
+            IMAGEM DO CANO: Obstáculo do jogo
+            - Move-se horizontalmente da direita para esquerda (animação CSS)
+            - JavaScript detecta colisão entre Mario e o cano
+            - Posicionado absolutamente no bottom do game-board
+            - Velocidade controlada pela animação CSS (1.5s)
+        -->
+    </div>
+    <!-- Fim do game-board -->
+  </body>
+  <!-- 
+    ========================================
+    FIM DA ESTRUTURA HTML
+    
+    FLUXO DO JOGO:
+    1. Página carrega (HTML estrutura os elementos)
+    2. CSS estiliza e anima os elementos
+    3. JavaScript detecta tecla pressionada e executa o pulo
+    4. Loop JavaScript verifica colisões a cada 10ms
+    5. Game over quando Mario colide com o cano
+    
+    Prof. Alexsander Barreto - AlexHolanda.com.br
+    ========================================
+--></html>
